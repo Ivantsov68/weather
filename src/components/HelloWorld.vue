@@ -1,6 +1,8 @@
 <template>
   <div class="wrapper">
     <h1>Прогноз погоды</h1>
+    <h2 class="city">Москва</h2>
+    <h4 class="geography">Широта:{{lat}} Долгота:{{lon}}</h4>
     <div class="pressure">
       Максимальное давление за последние 5 дней:{{ maxPressure }}
     </div>
@@ -8,7 +10,7 @@
       <button @click="loadPressure" class="btn">Расчёт давления</button>
     </div>
     <div class="temperature">
-      День с минимальной разницей температур:{{ realDay }}
+      День с минимальной разницей температур:{{ realDay }}<br/>Разница температур: {{temperature}}
     </div>
     <div>
       <button @click="loadTemp" class="btn">Расчёт температуры</button>
@@ -29,6 +31,7 @@ export default {
       unixDay: 86400,
       realDay: 0,
       maxPressure: 0,
+      temperature: 0
     };
   },
   methods: {
@@ -97,6 +100,10 @@ export default {
             (minDay.getMonth() + 1) +
             "/" +
             minDay.getFullYear();
+          this.temperature = Math.abs(
+              response.data.daily[min].temp.night -
+                response.data.daily[min].temp.morn
+          ).toFixed(2)
         });
     },
   },
